@@ -90,3 +90,26 @@ class list_pro(list):
             raise ValueError
 
 
+print('сложение')
+a = list_pro(1, 2, 3, 6)
+b = list_pro(1, 2, 5)
+print(f'{a}+{b}={a + b}')
+print(a, b)
+
+print('вычитание')
+a = list_pro(1, 2, 3)
+b = list_pro(1, 2, 5, 6)
+print(f'{a}-{b}={a - b}')
+print(a, b)
+
+print('сравнение (>)')
+a = list_pro(1, 2, 3)
+b = list_pro(1, 2, 5, 6)
+print(f'{a}>{b} - {a > b}')
+print(a, b)
+
+print('сравнение (==)')
+a = list_pro(2, 1, 3)
+b = list_pro(1, 1, 4)
+print(f'{a}={b} - {a == b}')
+print(a, b)

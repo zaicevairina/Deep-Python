@@ -16,13 +16,17 @@ class MedianFinder:
         self.data.sort()
         size = self.size()
         if size % 2 == 0:
-            return sum(self.data[int(size / 2) - 1:int(size / 2) + 1]) / 2
+            return sum(self.data[size // 2) - 1:int(size / 2) + 1]) / 2
         else:
             return self.data[int(size / 2)]
 
-    def size(self):
+    def size(self)->int:
         return len(self.data)
 
-# obj = MedianFinder()
-# obj.addNum(num)
-# param_2 = obj.findMedian()
+obj = MedianFinder()
+obj.addNum(1)
+print(obj.findMedian())
+obj.addNum(2)
+print(obj.findMedian())
+obj.addNum(3)
+print(obj.findMedian())

@@ -1,0 +1,55 @@
+INFO:root:begin function
+DEBUG:root:len of list great 1
+DEBUG:root:return result
+INFO:root:begin function
+DEBUG:root:len of list great 1
+DEBUG:root:return result
+INFO:root:begin function
+DEBUG:root:len of list great 1
+DEBUG:root:return result
+INFO:root:begin function
+DEBUG:root:len of list great 1
+DEBUG:root:return result
+INFO:root:begin function
+ERROR:root:len of list less 1
+INFO:root:begin function
+CRITICAL:root:type not list
+INFO:root:begin function
+DEBUG:root:len of list great 1
+DEBUG:root:return result
+INFO:root:begin function
+ERROR:root:len of list less 1
+INFO:root:begin function
+CRITICAL:root:type not list
+INFO:root:begin function
+DEBUG:root:len of list great 1
+DEBUG:root:return result
+INFO:root:begin function
+DEBUG:root:len of list great 1
+DEBUG:root:return result
+INFO:root:begin function
+DEBUG:root:len of list great 1
+DEBUG:root:return result
+INFO:root:begin function
+DEBUG:root:len of list great 1
+DEBUG:root:return result
+INFO:root:begin function
+ERROR:root:len of list less 1
+INFO:root:begin function
+CRITICAL:root:type not list
+INFO:root:begin function
+DEBUG:root:len of list great 1
+DEBUG:root:return result
+INFO:root:begin function
+DEBUG:root:len of list great 1
+DEBUG:root:return result
+INFO:root:begin function
+DEBUG:root:len of list great 1
+DEBUG:root:return result
+INFO:root:begin function
+ERROR:root:len of list less 1
+INFO:root:begin function
+CRITICAL:root:type not list
+INFO:root:begin function
+DEBUG:root:len of list great 1
+DEBUG:root:return result
