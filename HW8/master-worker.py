@@ -11,6 +11,11 @@ from threading import Thread, RLock
 import signal
 import os
 from time import sleep
+import re
+
+from nltk.corpus import stopwords
+
+stops = set(stopwords.words('russian')).union(set(stopwords.words('english')))
 
 code = 'utf-8'
 def signal_f(signum, frame):
@@ -36,18 +41,42 @@ def worker(q,i):
         if url is None:
             break
         else:
-            html = requests.get(url)
-            bs = BeautifulSoup(html.text, 'html.parser')
-            answer = bs.get_text()
-            json_data = Response.create(code='200', text=f'*****{url}*****',th=i)
-            conn.sendall(json_data.encode(code))
-            for j in range(0,len(answer),30):
-                json_data = Response.create(code='200', text=answer[j:j+30],th=i)
-                conn.send(json_data.encode(code))
-                sleep(0.05)
-            with mutex:
-                count+=1
-            print( f' Thread #{i} complites {url}')
+            try:
+                html = requests.get(url)
+                bs = BeautifulSoup(html.text, 'html.parser')
+                answer = bs.get_text()
+                answer = answer.replace('\n', ' ')
+                answer = answer.replace('\t', ' ')
+                answer = re.sub("[^а-яА-Я]", " ", answer)
+                words = answer.split()
+                dictionary = {}
+                for word in words:
+                    if word in dictionary:
+                        dictionary[word] += 1
+                    else:
+                        dictionary[word] = 1
+                list_d = list(dictionary.items())
+                list_d.sort(key=lambda i: i[1], reverse=True)
+                answer = []
+                for pair in list_d:
+                    if len(answer) < 10 and not (pair[0] in stops or len(pair[0]) == 1 or pair[0].isnumeric()):
+                        answer.append(pair)
+                    elif len(answer) == 10:
+                        break
+                temp=''
+                for pair in answer:
+                    temp+=pair[0]+' '
+                json_answer = Response.create(code=html.status_code, text=temp)
+                # json_answer = Response.create(code=html.status_code, text=f' Thread #{i} complites {url}')
+
+                conn.sendall(json_answer.encode(code))
+                with mutex:
+                    count+=1
+                print( f' Thread #{i} complites {url}')
+            except:
+                json_answer = Response.create(code=html.status_code, text='error')
+                conn.sendall(json_answer.encode(code))
+
         
 
 
@@ -57,7 +86,7 @@ if __name__ == "__main__":
     count=0
     mutex = RLock()
     print(f'pid={os.getpid()}')
-    print('Введите число процессов')
+    print('Введите число потоков')
     n_worker = input()
     if not n_worker.isnumeric():
         print('it is not number, try again')
@@ -72,22 +101,22 @@ if __name__ == "__main__":
         th.start()
 
     with socket.socket() as sock:
-        sock.bind(('127.0.0.1', 10003))
+        sock.bind(('127.0.0.1', 10006))
         sock.listen(0)
         while True:
             conn, addr = sock.accept()
-            conn.settimeout(100)
+            conn.settimeout(5)
             with conn:
-
                 while True:
                     try:
                         json_data = conn.recv(1024)
                         if not json_data:
                             break
                         request = Request(json_data.decode(code))
-                        urls = request.text
-                        for url in urls:
-                            q.put(url)
+                        url = request.text
+                        q.put(url)
+                    except socket.timeout:
+                        break
                     except OSError:
                         break
             break

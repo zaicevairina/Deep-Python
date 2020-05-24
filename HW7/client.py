@@ -12,7 +12,6 @@ regex = re.compile(
     r'(?::\d+)?'  # optional port
     r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
-
 result = ''
 
 url = input()
