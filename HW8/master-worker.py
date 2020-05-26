@@ -32,7 +32,7 @@ def signal_f(signum, frame):
     if conn:
         conn.close()
 
-def worker(q,i):
+def worker(q,i,top_N):
     global conn
     global count
     global mutex
@@ -59,9 +59,9 @@ def worker(q,i):
                 list_d.sort(key=lambda i: i[1], reverse=True)
                 answer = []
                 for pair in list_d:
-                    if len(answer) < 10 and not (pair[0] in stops or len(pair[0]) == 1 or pair[0].isnumeric()):
+                    if len(answer) < top_N and not (pair[0] in stops or len(pair[0]) == 1 or pair[0].isnumeric()):
                         answer.append(pair)
-                    elif len(answer) == 10:
+                    elif len(answer) == top_N:
                         break
                 temp=''
                 for pair in answer:
@@ -93,8 +93,15 @@ if __name__ == "__main__":
         n_worker = input()
     n_worker = int(n_worker)
 
+    print('Введите числ TOP N')
+    top_N = input()
+    if not top_N.isnumeric():
+        print('it is not number, try again')
+        top_N = input()
+    top_N = int(top_N)
+
     q = Queue(100)
-    ths = [Thread(target=worker, args=(q, i+1)) for i in range(n_worker)]
+    ths = [Thread(target=worker, args=(q, i+1,top_N)) for i in range(n_worker)]
     signal.signal(signal.SIGUSR1, signal_f)
 
     for th in ths:
